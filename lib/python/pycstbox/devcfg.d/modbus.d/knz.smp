@@ -1,0 +1,66 @@
+{
+    "productname" : "KIPP_AND_ZONNEN.SMP",
+    "__descr__" : {
+        "*" : "Pyranometer",
+        "fr" : "Pyranomètre"
+    },
+    "supports" : [],
+    "pdefs" : {
+        "root" : {
+            "__seq__" : ["address", "location", "enabled", "polling", "events_ttl"],
+            "polling" : {
+                "type" : "period",
+                "label" : {
+                    "fr" : "Période lecture",
+                    "*" : "Polling period"
+                },
+                "defvalue" : "1m"
+            },
+            "events_ttl" : {
+                "type" : "period",
+                "label" : {
+                    "fr" : "Validité des événements",
+                    "*" : "Events time to live"
+                },
+                "defvalue" : "2h"
+            }
+        },
+        "outputs" : {
+            "__seq__" : ["Irr", "temp"],
+            "Irr" : {
+                "__seq__" : ["enabled", "delta_min"],
+                "__descr__" : {
+                    "fr" : "Irradiance",
+                    "*" : "Irradiance"
+                },
+                "__vartype__" : "irradiance",
+                "__varunits__" : "W/m2",
+                "delta_min" : {
+                    "type" : "float",
+                    "label" : {
+                        "fr" : "Variation minimale",
+                        "*" : "Variation threshold"
+                    },
+                    "defvalue" : 5
+                }
+            },
+            "temp" : {
+                "__seq__" : ["enabled", "delta_min"],
+                "__descr__" :  {
+                    "fr" : "Température capteur",
+                    "*" : "Body temperature"
+                },
+                "__vartype__" : "temperature",
+                "__varunits__" : "degC",
+                "delta_min" : {
+                    "type" : "float",
+                    "label" : {
+                        "fr" : "Variation minimale",
+                        "*" : "Variation threshold"
+                    },
+                    "defvalue" : 0.5
+                }
+            }
+        }
+    }
+}
