@@ -11,3 +11,4 @@
 *.deb
 cstbox-*_all/
 deprecated/
+DEBIAN/control
