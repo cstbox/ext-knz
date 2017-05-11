@@ -36,6 +36,6 @@ class SMP(haldev.PolledDevice):
     publishing on D-Bus.
     """
 
-    def __init__(self, coord, cfg):
-        super(SMP, self).__init__(coord, cfg)
-        self._hwdev = smp.SMPInstrument(coord.port, cfg.address)
+    def __init__(self, coord_cfg, cfg):
+        super(SMP, self).__init__(coord_cfg, cfg)
+        self._hwdev = smp.SMPInstrument(coord_cfg.port, cfg.address)
