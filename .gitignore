@@ -13,3 +13,5 @@ cstbox-*_all/
 deprecated/
 DEBIAN/control
 RELEASE-VERSION
+/fabfile.py
+/fabfile-settings.py
