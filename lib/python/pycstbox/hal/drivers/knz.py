@@ -28,6 +28,7 @@ _logger = logging.getLogger('knz')
 
 DEFAULT_PRECISION = 3
 
+
 @hal_device(device_type="knz.smp", coordinator_type="modbus")
 class SMP(haldev.PolledDevice):
     """ HAL device modeling the Kipp and Zonnen SMP pyranometer.

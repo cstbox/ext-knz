@@ -29,18 +29,15 @@ Depends on Jonas Berg's minimalmodbus Python library :
     Version in date of writing: 0.4
 """
 
-import minimalmodbus
 import struct
 import math
 from collections import namedtuple
 
-from pycstbox.modbus import ModbusRegister
+from pycstbox.modbus import ModbusRegister, RTUModbusHWDevice
 from pycstbox.log import Loggable
 
 __author__ = 'Eric PASCUAL - CSTB (eric.pascual@cstb.fr)'
 __copyright__ = 'Copyright (c) 2013 CSTB'
-__vcs_id__ = '$Id$'
-__version__ = '1.0.0'
 
 
 # Input registers
@@ -95,6 +92,7 @@ OPMODE_ERROR = 5
 
 REG_CLEAR_ERROR = ModbusRegister(0x0A)
 
+
 class StatusFlags(object):
     """ Device status flags. """
 
@@ -121,15 +119,12 @@ class StatusFlags(object):
         return ','.join(self.flags_set)
 
 
-class SMPInstrument(minimalmodbus.Instrument, Loggable):
-    """ minimalmodbus.Instrument sub-class modeling the Kipp and Zonen SMP
-    pyranometer.
+class SMPInstrument(RTUModbusHWDevice):
+    """ Kipp and Zonen SMP pyranometer modeling class.
 
     The supported model is the RTU RS485 one, the RS485 bus being connected
     via a USB.RS485 interface.
     """
-
-    BAUDRATE = 9600
 
     # Definition of the type of the poll() method result
 
@@ -137,7 +132,7 @@ class SMPInstrument(minimalmodbus.Instrument, Loggable):
     # The name of its items MUST match the name of the outputs described
     # in the metadata stored in devcfg.d directory, since the notification
     # events generation process is based on this.
-    # (see pycstbox.hyal.device.PolledDevice.poll() method for details)
+    # (see pycstbox.hal.device.PolledDevice.poll() method for details)
     OutputValues = namedtuple('OutputValues', [
         'Irr',      # solar irradiance (W/m2)
         'temp',     # body temperature (degC)
@@ -148,19 +143,7 @@ class SMPInstrument(minimalmodbus.Instrument, Loggable):
         :param str port: serial port on which the RS485 interface is connected
         :param int unit_id: the address of the device
         """
-        minimalmodbus.Instrument.__init__(self,
-                                          port=port,
-                                          slaveaddress=int(unit_id))
-
-        self.serial.baudrate = self.BAUDRATE
-        self._first_poll = True
-
-        Loggable.__init__(self, logname='smp%03d' % self.address)
-
-    @property
-    def unit_id(self):
-        """ The id of the device """
-        return self.address
+        super(SMPInstrument, self).__init__(port=port, unit_id=int(unit_id), logname='smp')
 
     def reset(self):
         """ Resets operational mode """
@@ -199,6 +182,6 @@ class SMPInstrument(minimalmodbus.Instrument, Loggable):
             self.log_warn('reset done')
 
         return self.OutputValues(
-            Irr = sensor1_data / math.pow(10, scale_factor),
-            temp = temp / 10.0
+            Irr=sensor1_data / math.pow(10, scale_factor),
+            temp=temp / 10.0
         )
