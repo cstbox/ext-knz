@@ -18,15 +18,11 @@
 
 """ Kipp and Zonen pyranometer lew-level interface.
 
-This modules defines a sub-class of minimalmodbus.Instrument which polls the
+This modules provides a sub-class of :py:class:`RTUModbusHWDevice` which polls the
 parameters of interest (namely irradiance and body température).
 
 It also defines the input registers so that more specific needs can be
 implemented by sub-classing and overiding, or direct Modbus register read.
-
-Depends on Jonas Berg's minimalmodbus Python library :
-    https://pypi.python.org/pypi/MinimalModbus/
-    Version in date of writing: 0.4
 """
 
 import struct
@@ -34,7 +30,6 @@ import math
 from collections import namedtuple
 
 from pycstbox.modbus import ModbusRegister, RTUModbusHWDevice
-from pycstbox.log import Loggable
 
 __author__ = 'Eric PASCUAL - CSTB (eric.pascual@cstb.fr)'
 __copyright__ = 'Copyright (c) 2013 CSTB'
@@ -119,7 +114,7 @@ class StatusFlags(object):
         return ','.join(self.flags_set)
 
 
-class SMPInstrument(RTUModbusHWDevice):
+class SMPHWDevice(RTUModbusHWDevice):
     """ Kipp and Zonen SMP pyranometer modeling class.
 
     The supported model is the RTU RS485 one, the RS485 bus being connected
@@ -143,9 +138,9 @@ class SMPInstrument(RTUModbusHWDevice):
         :param str port: serial port on which the RS485 interface is connected
         :param int unit_id: the address of the device
         """
-        super(SMPInstrument, self).__init__(port=port, unit_id=int(unit_id), logname='smp')
+        super(SMPHWDevice, self).__init__(port=port, unit_id=int(unit_id), logname='smp')
 
-    def reset(self):
+    def reset_device(self):
         """ Resets operational mode """
         self.write_bit(REG_CLEAR_ERROR.addr, 1)
 
